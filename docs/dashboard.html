@@ -40,6 +40,9 @@
       </aside>
 
       <main class="content">
+        <div id="demoBanner" class="msg error" style="display:none;margin-bottom:12px;">
+          Chế độ demo trên GitHub Pages: menu xem được, các trang cần API sẽ báo lỗi cho đến khi bạn deploy backend HTTPS và sửa <code>API_BASE_URL</code> trong <code>assets/js/api.js</code>.
+        </div>
         <div class="card">
           <h2 style="margin:0 0 8px;">Chào mừng</h2>
           <div id="welcome" class="hint" style="font-size:14px;line-height:1.6;">
@@ -65,11 +68,15 @@
   <script>
     const session = requireLogin();
     if (session) {
+      if (session.demo) {
+        document.getElementById("demoBanner").style.display = "block";
+      }
       document.getElementById("userLabel").textContent = session.username || "User";
       document.getElementById("roleLabel").textContent = session.authority || "-";
       document.getElementById("accountIdLabel").textContent = session.accountId ? `Account: ${session.accountId}` : "";
-      document.getElementById("welcome").innerHTML =
-        `Bạn có thể bắt đầu từ menu bên trái. Nếu bạn thấy chức năng cần thiết bị ẩn, kiểm tra dữ liệu role trong bảng MySQL.`;
+      document.getElementById("welcome").innerHTML = session.demo
+        ? `Đang xem giao diện demo. Để dữ liệu thật: chạy Spring Boot, mở site qua <b>http://localhost</b> hoặc đặt API công khai.`
+        : `Bạn có thể bắt đầu từ menu bên trái. Nếu bạn thấy chức năng cần thiết bị ẩn, kiểm tra dữ liệu role trong bảng MySQL.`;
       initPage();
     }
   </script>

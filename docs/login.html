@@ -14,7 +14,7 @@
         <span class="badge">Demo GitHub Pages</span>
       </div>
       <h2 style="margin:0 0 8px;">Đăng nhập</h2>
-      <div class="hint" style="margin-bottom:14px;">Dùng để truy cập các trang theo vai trò. Trên <b>github.io</b> cần backend công khai (HTTPS); <code>localhost:8080</code> sẽ không hoạt động.</div>
+      <div class="hint" style="margin-bottom:14px;">Trên <b>github.io</b>: nhập user/password bất kỳ rồi Đăng nhập sẽ vào màn hình chính (xem giao diện, dữ liệu API không chạy). Máy local + Spring Boot: dùng tài khoản MySQL như bình thường.</div>
 
       <div id="msg" class="msg" style="display:none;margin-bottom:12px;"></div>
 
@@ -55,6 +55,12 @@
       loginBtn.disabled = true;
       loginBtn.textContent = "Đang xử lý…";
       msg.style.display = "none";
+
+      if (typeof isGithubPagesStaticDemo === "function" && isGithubPagesStaticDemo()) {
+        setSession(buildDemoSession(username));
+        window.location.href = "dashboard.html";
+        return;
+      }
 
       try{
         const payload = await apiRequest("/api/auth/login", {
