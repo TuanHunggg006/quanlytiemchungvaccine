@@ -42,9 +42,56 @@ function renderSidebar(session) {
   }
 }
 
+function bindHeaderSession(session) {
+  if (!session || !session.success) return;
+  const roleRaw =
+    session.authority ??
+    session.role ??
+    session.userRole ??
+    session.AUTHORITY ??
+    "";
+  const role = roleRaw != null ? String(roleRaw).trim() : "";
+  const nameRaw =
+    session.username ??
+    session.userName ??
+    session.USERNAME ??
+    "";
+  let displayName = nameRaw != null ? String(nameRaw).trim() : "";
+  if (!displayName && session.accountId != null) {
+    displayName = String(session.accountId).trim();
+  }
+
+  const roleEl = document.getElementById("headerRole");
+  const userLink = document.getElementById("headerUserLink");
+  if (roleEl) {
+    roleEl.textContent = role || "Chưa xác định";
+    roleEl.title = "Vai trò: " + (role || "Chưa xác định");
+  }
+  if (userLink) {
+    userLink.textContent = displayName || "Hồ sơ";
+    userLink.href = "profile.html";
+    userLink.title = displayName ? "Xem hồ sơ: " + displayName : "Hồ sơ cá nhân";
+  }
+  const sideBanner = document.getElementById("sidebarRoleBanner");
+  if (sideBanner) {
+    sideBanner.textContent = role ? "Vai trò: " + role : "Vai trò: Chưa xác định";
+  }
+}
+
 function initPage() {
   const session = requireLogin();
   if (!session) return;
+  bindHeaderSession(session);
   renderSidebar(session);
 }
+
+(function applySessionToChrome() {
+  try {
+    if (typeof getSession !== "function") return;
+    const s = getSession();
+    if (s && s.success) bindHeaderSession(s);
+  } catch (_) {
+    /* ignore */
+  }
+})();
 
