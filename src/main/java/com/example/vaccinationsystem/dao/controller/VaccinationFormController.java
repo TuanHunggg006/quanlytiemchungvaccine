@@ -18,7 +18,8 @@ import com.example.vaccinationsystem.dto.VaccinationFormCreateRequest;
 import com.example.vaccinationsystem.dto.VaccinationFormInfoDTO;
 import com.example.vaccinationsystem.dto.VaccinationFormVaccineDTO;
 import com.example.vaccinationsystem.service.VaccinationFormService;
-
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 
 @RestController
@@ -30,17 +31,19 @@ public class VaccinationFormController {
     public VaccinationFormController(VaccinationFormService formService) {
         this.formService = formService;
     }
-
-    @GetMapping("/vaccination-forms")
-    public ResponseEntity<?> getAllForms() {
-        try {
-            return ResponseEntity.ok(formService.getAllFormsInfo());
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500)
-                    .body("ERR getAllForms: " + e.getClass().getName() + " - " + e.getMessage());
-        }
+@GetMapping("/vaccination-forms")
+public ResponseEntity<?> getAllForms() {
+    try {
+        return ResponseEntity.ok(formService.getAllFormsInfo());
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500)
+                .body(Map.of(
+                        "message",
+                        "ERR getAllForms: " + e.getClass().getName() + " - " + e.getMessage()
+                ));
     }
+}
 
     @PostMapping(value = "/vaccination-forms", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createForm(@Valid @RequestBody VaccinationFormCreateRequest request) {
