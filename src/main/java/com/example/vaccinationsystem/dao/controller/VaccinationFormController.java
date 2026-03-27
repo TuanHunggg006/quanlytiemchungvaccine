@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,33 +32,70 @@ public class VaccinationFormController {
     }
 
     @GetMapping("/vaccination-forms")
-    public List<VaccinationFormInfoDTO> getAllForms() {
-        return formService.getAllFormsInfo();
+    public ResponseEntity<?> getAllForms() {
+        try {
+            return ResponseEntity.ok(formService.getAllFormsInfo());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR getAllForms: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     @PostMapping(value = "/vaccination-forms", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String createForm(@Valid @RequestBody VaccinationFormCreateRequest request) {
-        return formService.createVaccinationForm(request);
+    public ResponseEntity<?> createForm(@Valid @RequestBody VaccinationFormCreateRequest request) {
+        try {
+            return ResponseEntity.ok(formService.createVaccinationForm(request));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR createForm: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     @GetMapping("/vaccination-forms/{id}/vaccines")
-    public List<VaccinationFormVaccineDTO> getVaccinesFromForm(@PathVariable("id") String id) {
-        return formService.getVaccinesFromForm(id);
+    public ResponseEntity<?> getVaccinesFromForm(@PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok(formService.getVaccinesFromForm(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR getVaccinesFromForm: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     @GetMapping("/vaccination-forms/{id}/customer-name")
-    public Optional<String> getCustomerNameFromForm(@PathVariable("id") String id) {
-        return formService.getCustomerNameFromForm(id);
+    public ResponseEntity<?> getCustomerNameFromForm(@PathVariable("id") String id) {
+        try {
+            Optional<String> result = formService.getCustomerNameFromForm(id);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR getCustomerNameFromForm: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     @GetMapping("/vaccination-forms/{id}/payment-status")
-    public boolean hasBillForForm(@PathVariable("id") String id) {
-        return formService.hasBillForForm(id);
+    public ResponseEntity<?> hasBillForForm(@PathVariable("id") String id) {
+        try {
+            return ResponseEntity.ok(formService.hasBillForForm(id));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR hasBillForForm: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/vaccination-forms/{id}")
-    public void deleteForm(@PathVariable("id") String id) {
-        formService.deleteForm(id);
+    public ResponseEntity<?> deleteForm(@PathVariable("id") String id) {
+        try {
+            formService.deleteForm(id);
+            return ResponseEntity.ok("Deleted");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("ERR deleteForm: " + e.getClass().getName() + " - " + e.getMessage());
+        }
     }
 }
-
