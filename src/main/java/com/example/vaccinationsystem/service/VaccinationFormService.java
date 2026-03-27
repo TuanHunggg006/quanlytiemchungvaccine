@@ -51,9 +51,17 @@ public class VaccinationFormService {
         return formId;
     }
 
+    // public List<VaccinationFormInfoDTO> getAllFormsInfo() {
+    //     return formDao.getAllFormsInfo();
+    // }
     public List<VaccinationFormInfoDTO> getAllFormsInfo() {
+    try {
         return formDao.getAllFormsInfo();
+    } catch (Exception e) {
+        e.printStackTrace();
+        throw e;
     }
+}
 
     public List<VaccinationFormVaccineDTO> getVaccinesFromForm(String formId) {
         if (!formDao.existsById(formId)) {
