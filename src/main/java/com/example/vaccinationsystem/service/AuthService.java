@@ -12,7 +12,7 @@ public class AuthService {
     private final AccountDao accountDao;
     private final boolean hashEnabled;
 
-    public AuthService(AccountDao accountDao, @Value("${app.password.hash-enabled:true}") boolean hashEnabled) {
+    public AuthService(AccountDao accountDao, @Value("${app.password.hash-enabled:false}") boolean hashEnabled) {
         this.accountDao = accountDao;
         this.hashEnabled = hashEnabled;
     }
