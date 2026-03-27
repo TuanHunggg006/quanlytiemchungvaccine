@@ -1,4 +1,4 @@
-const API_BASE_URL_OVERRIDE = "https://gigglier-colten-answerlessly.ngrok-free.dev";
+const API_BASE_URL_OVERRIDE = "https://quanlytiemchungvaccine-production.up.railway.app";
 
 const API_BASE_URL = (() => {
   if (API_BASE_URL_OVERRIDE != null && String(API_BASE_URL_OVERRIDE).trim() !== "") {
@@ -11,19 +11,17 @@ const API_BASE_URL = (() => {
     }
     return "";
   } catch {
-    return "";  
+    return "";
   }
 })();
 
 const API_TIMEOUT_MS = 15000;
 
 async function apiRequest(path, { method = "GET", body } = {}) {
-  // Sửa lỗi lặp đường dẫn: nếu path đã có sẵn API_BASE_URL thì không nối thêm nữa
   const finalPath = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
-  
+
   const headers = {
     "Content-Type": "application/json",
-    // QUAN TRỌNG: Header này giúp bỏ qua trang cảnh báo của ngrok
     "ngrok-skip-browser-warning": "true"
   };
 
@@ -53,7 +51,20 @@ async function apiRequest(path, { method = "GET", body } = {}) {
   }
 }
 
-// Các hàm getSession, setSession, clearSession giữ nguyên của bạn...
-function getSession() { const raw = localStorage.getItem("session"); if (!raw) return null; try { return JSON.parse(raw); } catch { return null; } }
-function setSession(data) { localStorage.setItem("session", JSON.stringify(data)); }
-function clearSession() { localStorage.removeItem("session"); }
+function getSession() {
+  const raw = localStorage.getItem("session");
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function setSession(data) {
+  localStorage.setItem("session", JSON.stringify(data));
+}
+
+function clearSession() {
+  localStorage.removeItem("session");
+}
